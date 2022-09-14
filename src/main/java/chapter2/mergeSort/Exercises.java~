@@ -1,0 +1,71 @@
+public class Exercises {
+    public static void main(String[] args) {
+	sort(new int[]{3, -10, 8, -9, 12, 28, 0, 3, -7, 11});
+	sort(new int[]{24, 13, 1, 16, 27, -8, 0, -3, -5, -8, -1, 0, -10});
+    }
+
+    public static void fasterMerge(int[] array) {
+	
+    }
+
+    private static void sort(int[] array) {
+	//topDownMergeSort(array);
+	bottomUpMergeSort(array);
+	printArray(array);
+    }
+
+    private static void bottomUpMergeSort(int[] array) {
+	int[] copy = new int[array.length];
+	for (int k = 0; k < array.length; k++) copy[k] = array[k];
+	
+	for (int size = 1; size < array.length; size = 2 * size) {
+	    for (int lo = 0; lo < array.length - size; lo += 2 *size) {
+		int hi = Math.min(lo + 2*size - 1, array.length-1);
+		int med = lo + size - 1;
+		merge(lo, med, hi, copy, array);
+	    }
+	}
+    }
+
+    private static void topDownMergeSort(int[] array) {
+	int[] copy = new int[array.length];
+	divide(0, array.length - 1, copy, array);
+    }
+
+    private static void divide(int lo, int hi, int[] copy, int[] array) {
+	if (hi <= lo) return;
+	int med = lo + (hi - lo)/2;
+	divide(lo, med, copy, array);
+	divide(med + 1, hi, copy, array);
+
+	merge(lo, med, hi, copy, array);
+    }
+
+    private static void merge(int lo, int med, int hi, int[] copy, int[] array) {
+	int idxFirstHalf = lo;
+	int idxSecondHalf = med + 1;
+	int current = lo;
+
+	for (int j = lo; j <= hi; j++) copy[j] = array[j];
+
+	while (current <= hi) {
+	    if (idxFirstHalf > med) array[current++] = copy[idxSecondHalf++];
+	    else if (idxSecondHalf > hi) array[current++] = copy[idxFirstHalf++];
+	    else if (copy[idxFirstHalf] < copy[idxSecondHalf]) array[current++] = copy[idxFirstHalf++];
+	    else array[current++] = copy[idxSecondHalf++];
+	}
+    }
+
+    private static void print(String str) {
+	System.out.println(str);
+    }
+
+    private static void printArray(int[] array) {
+	StringBuilder str = new StringBuilder();
+	for (int j = 0; j < array.length; j++) {
+	    str.append(array[j]);
+	    str.append(" ");
+	}
+	print(str.toString());
+    }
+}

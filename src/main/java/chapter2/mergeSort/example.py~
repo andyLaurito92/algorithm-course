@@ -1,0 +1,27 @@
+def bottomUpMergeSort(anArray):
+    aux = anArray.copy()
+    for size in range(1, anArray.length, 2*size):
+        for lo in range(0, anArray.length, 2*size):
+            hi = lo + 2*size - 1
+            med = lo + size -1
+            merge(lo, med, hi, anArray, aux)
+
+
+def merge(lo, med, hi, array, copy):
+    idxFirst = lo
+    idxSecond = med
+    current = lo
+
+    for i in range(lo, hi):
+        copy[i] = array[i]
+
+    for current in range(lo, hi + 1):
+        if idxFirst > med:
+            array[current++] = copy[idxSecond++]
+        elif idxSecond > hi:
+            array[current++] = copy[idxFirst++]
+        elif copy[idxFirst] < copy[idxSecond]:
+            array[current++] = copy[idxFirst]
+        else:
+            array[current++] = copy[idxSecond]
+        
